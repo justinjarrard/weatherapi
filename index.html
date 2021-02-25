@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./style.css">
+  <title>Document</title>
+</head>
+
+<body>
+
+  <div class="wrapper">
+    <div class="one">One
+      <form>
+        <p>
+          <label for="cityName">City Search</label>
+          <input type="text" name="cityName" id="cityName">
+        </p>
+        <button id="search">Search</button>
+      </form>
+    </div>
+    <div class="two" id="data">two</div>
+    <div class="three" id="prevCity">Three
+      <ul id="cityList">
+        <li id="searchedCities" class="list-group-item"></li>
+      </ul>
+    </div>
+    <div class="four">
+      <h1>5-Day Forecast</h1>
+      <div class="box1" id="dayone">Item 1</div>
+      <div class="box2" id="daytwo">Item 2</div>
+      <div class="box3" id="daythree">Item 3</div>
+      <div class="box4" id="dayfour">Item 4</div>
+      <div class="box5" id="dayfive">Item 5</div>
+    </div>
+  </div>
+
+  <div id="cityName5day"></div>
+
+  <!-- <div id="data"></div> -->
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    document.getElementById('search').addEventListener('click', event => {
+      event.preventDefault()
+      let cityName = document.getElementById('cityName').value
+
+      axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=2e9f911583d5a81e49dc93fcc9291d97&units=imperial`)
+        .then(res => {
+          let data = res.data
+
+          console.log(data)
+
+          // let cityElem = document.createElement('li')
+          // cityElem.className = 'list-group-item'
+          // cityElem.textContent = document.getElementById('search').value
+          // document.getElementById('searchedCities').append(cityElem).value
+
+          document.getElementById('data').innerHTML = `
+        <h1>${data.name}<img src='http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png'/></h1>
+        <p>Temperature: ${data.main.temp}</p>
+        <p>Humidity: ${data.main.humidity}</p>
+        <p>Wind Speed: ${data.wind.speed}</p>
+        `
+        })
+        .catch(err => {
+          console.error(err)
+        })
+    })
+
+    document.getElementById('search').addEventListener('click', event => {
+      event.preventDefault()
+      let cityName = document.getElementById('cityName').value
+
+      axios.get(`http://api.openweathermap.org/data/2.5/forecast?q=${cityName}&appid=2e9f911583d5a81e49dc93fcc9291d97&units=imperial`)
+        .then(res => {
+          let data = res.data
+          console.log(data)
+
+          document.getElementById('dayone').innerHTML = `
+      <img src='http://openweathermap.org/img/wn/${data.list[3].weather[0].icon}@2x.png'/>
+      <p>Temp: ${data.list[3].main.temp}</p>
+      <p>Humidity: ${data.list[3].main.humidity}</p>`
+
+          document.getElementById('daytwo').innerHTML = `
+      <img src='http://openweathermap.org/img/wn/${data.list[11].weather[0].icon}@2x.png'/>
+      <p>Temp: ${data.list[11].main.temp}</p>
+      <p>Humidity: ${data.list[11].main.humidity}`
+
+          document.getElementById('daythree').innerHTML = `
+        <img src='http://openweathermap.org/img/wn/${data.list[19].weather[0].icon}@2x.png'/>
+      <p>Temp: ${data.list[19].main.temp}</p>
+      <p>Humidity: ${data.list[19].main.humidity}`
+
+          document.getElementById('dayfour').innerHTML = `
+        <img src='http://openweathermap.org/img/wn/${data.list[27].weather[0].icon}@2x.png'/>
+      <p>Temp: ${data.list[27].main.temp}</p>
+      <p>Humidity: ${data.list[27].main.humidity}`
+
+          document.getElementById('dayfive').innerHTML = `
+        <img src='http://openweathermap.org/img/wn/${data.list[35].weather[0].icon}@2x.png'/>
+      <p>Temp: ${data.list[35].main.temp}</p>
+      <p>Humidity: ${data.list[35].main.humidity}`
+        })
+        .catch(err => {
+          console.error(err)
+        })
+    })
+
+  // document.getElementById('cityName').value = localStorage.getItem('prevCity')
+  // document.addEventListener('click', event => {
+  //     if (event.target.id.includes('prevCity')) {
+  //       let prevCityDisplay = localStorage.setItem('cityName', document.getElementById('prevCity').value)
+  //     }
+  //   })
+  </script>
+</body>
+
+</html>
